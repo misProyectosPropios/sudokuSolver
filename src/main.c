@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-
-#define sudoku_height 9
-#define sudoku_width  9
-#define sudoku_square_height 3
-#define sudoku_square_width 3
+#define sudoku_size 9
+#define sudoku_square_size 3
 #define sudoku_empty_cell -1
 /**
  * Si una celda está vácia, tiene un -1 por default
@@ -14,177 +12,100 @@ struct sudoku {
     int matriz[9][9]
 };
 
-
-
-struct sudoku sudokuResuelto(struct sudoku sudokuPorResolver);
-void backtrackingSudoku(struct sudoku* sudokuPorResolver);
-int esSudokuCompletado(struct sudoku* sudokuPorResolver);
-
-int noSeRepitenNumerosEnFilas(struct sudoku* sudokuResolviendo);
-int noHayNumerosRepetidosEnFilaN(struct sudoku* sudokuResolviendo, int fila);
-
-int noSeRepitenNumerosEnColumnas(struct sudoku* sudokuResolviendo);
-int noHayNumerosRepetidosEnColumnaN(struct sudoku* sudokuResolviendo, int columna);
-
-int noSeRepitenNumerosEnCuadrados(struct sudoku* sudokuResolviendo); 
-int noHayNumerosRepetidosEnCuadradoN(struct sudoku* sudokuResolviendo, int cuadradoAVerificar); 
-int noHayCeldasVacias(struct sudoku* sudokuResolviendo);
-
-int invertirRespuesta(int respuesta)
+bool hayNumerosRepetidosEnFilaN(struct sudoku* sudokuResolviendo, int fila);
+bool seRepitenNumerosEnColumnas(struct sudoku* sudokuResolviendo);
+bool hayNumerosRepetidosEnColumnaN(struct sudoku* sudokuResolviendo, int columna);
+bool seRepitenNumerosEnCuadrados(struct sudoku* sudokuResolviendo);
+bool hayNumerosRepetidosEnCuadradoN(struct sudoku* sudokuResolviendo, int cuadradoAVerificar);
+bool hayCeldasVacias(struct sudoku* sudokuResolviendo);
+bool esSolucionParcialCorrecta(struct sudoku* sudokuResolviendo);
+bool esSudokuCompletado(struct sudoku* sudokuPorResolver);
+void backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna);
+void sudokuResuelto(struct sudoku sudokuResuelto, struct sudoku sudokuPorResolver);
 
 int main() {
 
     return 0;
 }
 
-struct sudoku sudokuResuelto(struct sudoku sudokuPorResolver) {
-    struct sudoku sudokuResuelto;
+void sudokuResuelto(struct sudoku sudokuResuelto, struct sudoku sudokuPorResolver) {
     
-    for(int i = 0; i < sudoku_height; i++) {
-        for(int j = 0; j < sudoku_width; j++) {
+    for(int i = 0; i < sudoku_size; i++) {
+        for(int j = 0; j < sudoku_size; j++) {
             sudokuResuelto.matriz[i][j] = sudokuPorResolver.matriz[i][j];
         }
     }
-
-    return sudokuResuelto;
 }
 
-int noSeRepitenNumerosEnFilas(struct sudoku* sudokuResolviendo) {
-    /* 
-     * Returns 0 if it's there's no row with values repeatead. 
-     * Otherwise, returns non-zero value
-     */
-    
-    
-    for(int i = 0; i < sudoku_square_height; i++) {
-
-    }
-
-    return 0;
-}
-
-int noHayNumerosRepetidosEnFilaN(struct sudoku* sudokuResolviendo, int fila) {
-    /* 
-     * Requires: 0 <= fila <= 8
-     * Returns 0 if it's the nth-row have any repeatead values (except -1, it's the empty cell) 
-     * Otherwise, returns non-zero value
-     */
-    uint8_t aparicionesNumeros[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-     for(int i = 0; i < sudoku_square_width; i++) {
-        int numeroEnCelda = sudokuResolviendo->matriz[fila][i] - 1;
-        if (aparicionesNumeros[numeroEnCelda] == 0) {
-            aparicionesNumeros[numeroEnCelda]++;
-        } else {
-            return 0;
+bool seRepitenNumerosEnFilas(struct sudoku* sudokuResolviendo) {
+    for(int i = 0; i < sudoku_size; i++) {
+        if(hayNumerosRepetidosEnFilaN(sudokuResolviendo, i)) {
+            return true;
         }
     }
-    return 1;
+    return false;
 }
 
-int noSeRepitenNumerosEnColumnas(struct sudoku* sudokuResolviendo) {
-    /* 
-     * Returns 0 if it's there's no column with values repeatead. 
-     * Otherwise, returns non-zero value
-     */
-    return 0;
+bool hayNumerosRepetidosEnFilaN(struct sudoku* sudokuResolviendo, int fila) {
+    return false;
 }
 
-int noHayNumerosRepetidosEnColumnaN(struct sudoku* sudokuResolviendo, int columna) {
-    /* 
-     * Returns 0 if it's the nth-column have any repeatead values (except -1, it's the empty cell) 
-     * Otherwise, returns non-zero value
-     */
-    uint8_t aparicionesNumeros[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-     for(int i = 0; i < sudoku_square_width; i++) {
-        int numeroEnCelda = sudokuResolviendo->matriz[i][columna] - 1;
-        if (aparicionesNumeros[numeroEnCelda] == 0) {
-            aparicionesNumeros[numeroEnCelda]++;
-        } else {
-            return 0;
+bool seRepitenNumerosEnColumnas(struct sudoku* sudokuResolviendo) {
+    for(int i = 0; i < sudoku_size; i++) {
+        if(hayNumerosRepetidosEnColumnaN(sudokuResolviendo, i)) {
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
-int noSeRepitenNumerosEnCuadrados(struct sudoku* sudokuResolviendo) {
-    /* 
-     * Returns 0 if it's the nth-square have any repeatead values (except -1, it's the empty cell) 
-     * Otherwise, returns non-zero value
-     */
+bool hayNumerosRepetidosEnColumnaN(struct sudoku* sudokuResolviendo, int columna) {
+    return false;
 }
 
-int noHayNumerosRepetidosEnCuadradoN(struct sudoku* sudokuResolviendo, int cuadradoAVerificar) {
-    /* 
-     * Returns 0 if it's the nth-square have any repeatead values (except -1, it's the empty cell) 
-     * Otherwise, returns non-zero value
-     */
-    return 0;
+bool seRepitenNumerosEnCuadrados(struct sudoku* sudokuResolviendo) {
+    for(int i = 0; i < sudoku_size; i++) {
+        if(hayNumerosRepetidosEnCuadradoN(sudokuResolviendo, i)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-int hayCeldasVacias(struct sudoku* sudokuResolviendo) {
-    /* 
-     * Returns 0 if it's there's some cell with value empty (-1)
-     * Otherwise, returns non-zero value
-     */
-    int thereNonEmptySquare = 0;
-    for(int i = 0; i < sudoku_square_height; i++) {
-        for(int j = 0; j < sudoku_square_width; j++) {
-            if(sudokuResolviendo->matriz[i][j] == sudoku_empty_cell) {
-                return 1;
+bool hayNumerosRepetidosEnCuadradoN(struct sudoku* sudokuResolviendo, int cuadradoAVerificar) {
+    return false;
+}
+
+bool hayCeldasVacias(struct sudoku* sudokuResolviendo) {
+    for(int i = 0; i < sudoku_size; i++) {
+        for(int j = 0; j < sudoku_size; j++) {
+            if (sudokuResolviendo->matriz[i][j] == sudoku_empty_cell) {
+                return true;
             }
         }
     }
-    return thereNonEmptySquare;
+    return false;
 }
 
-int invertirRespuesta(int respuesta) {
-    /**
-     * Returns non-zero if respuesta is zero
-     * Returns zero if respuesta is non-zero
-     */
-    if (respuesta == 0) {
-        return 1;
-    }
-    return 0;
+bool esSolucionParcialCorrecta(struct sudoku* sudokuResolviendo) {
+    return  !seRepitenNumerosEnFilas(sudokuResolviendo) &&
+            !seRepitenNumerosEnColumnas(sudokuResolviendo) &&
+            !seRepitenNumerosEnCuadrados(sudokuResolviendo);
 }
 
-int noHayCeldasVacias(struct sudoku* sudokuResolviendo) {
-    return invertirRespuesta(hayCeldasVacias(sudokuResolviendo));
+bool esSudokuCompletado(struct sudoku* sudokuPorResolver) {
+    return esSolucionParcialCorrecta(sudokuPorResolver) && !hayCeldasVacias(sudokuPorResolver);
 }
 
-int esSolucionParcialCorrecta(struct sudoku* sudokuResolviendo) {
-    /*
-     * Returns 0 if it's not correct. 
-     * Otherwise, returns non-zero value
-     */
-    
-    // Verificar todas las condiciones
-    // No se repiten numeros en las filas
-    // No se repiten números en las columnas
-    // No se repiten números en los cuadrados
-    return 1;
-}
-
-int esSudokuCompletado(struct sudoku* sudokuPorResolver) {
-    /* 
-     * Returns 0 if it's not completed. 
-     * Otherwise, returns non-zero value
-     */
-
-    // Verificar todas las condiciones
-    // No se repiten numeros en las filas
-    // No se repiten números en las columnas
-    // No se repiten números en los cuadrados
-    // No hay celdas vácias
-    return 1;
-}
-
-void backtrackingSudoku(struct sudoku* sudokuPorResolver) {
+void backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna) {
     /**
      * 
      */
+    if (fila == (sudoku_size - 1) && columna == (sudoku_size - 1) && esSudokuCompletado(sudokuPorResolver)) {
+        return;
+    }
+
+
 }
 
 
