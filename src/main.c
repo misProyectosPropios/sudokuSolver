@@ -20,7 +20,7 @@ bool hayNumerosRepetidosEnCuadradoN(struct sudoku* sudokuResolviendo, int cuadra
 bool hayCeldasVacias(struct sudoku* sudokuResolviendo);
 bool esSolucionParcialCorrecta(struct sudoku* sudokuResolviendo);
 bool esSudokuCompletado(struct sudoku* sudokuPorResolver);
-void backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna);
+bool backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna);
 void sudokuResuelto(struct sudoku sudokuResuelto, struct sudoku sudokuPorResolver);
 
 int main() {
@@ -97,14 +97,28 @@ bool esSudokuCompletado(struct sudoku* sudokuPorResolver) {
     return esSolucionParcialCorrecta(sudokuPorResolver) && !hayCeldasVacias(sudokuPorResolver);
 }
 
-void backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna) {
+bool backtrackingSudoku(struct sudoku* sudokuPorResolver, int fila, int columna) {
     /**
-     * 
+     * Voy a iterar por la filas. Llego hasta el final y sumo uno a la columna
+     * El numero de matriz fila, columna lo voy a tener puesto por el anterior
+     * Yo pongo el siguiente
+     * El llamado a la función llama en todos los estados posibles
      */
     if (fila == (sudoku_size - 1) && columna == (sudoku_size - 1) && esSudokuCompletado(sudokuPorResolver)) {
-        return;
+        return true;
+    }
+    if (fila == sudoku_size - 1) {
+        columna++;
+        fila = 0;
+    } else {
+        fila++;
     }
 
+    //Verificar 
+
+    //Probar con todas los numeros del 1 and 9 inclusive
+    //Si alguno devuelve true, no modificar más el sudoku por resolver
+    //Sino, era un camino sin fin
 
 }
 
