@@ -1,33 +1,30 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -I./src -I/usr/include/lcunit
-LDFLAGS = -llcunit
+CFLAGS = -Wall -Wextra -g
+LDLIBS = -lcunit
 
-# Directories
+# Paths
 SRC_DIR = src
 TEST_DIR = tests
-BUILD_DIR = build
+BIN_DIR = bin
 
 # Files
-SRC = $(SRC_DIR)/main.c
+SRC = $(SRC_DIR)/sudoku.c
 TEST = $(TEST_DIR)/test.c
-TARGET = $(BUILD_DIR)/test_runner
+TARGET = $(BIN_DIR)/test
 
-# Default rule
-all: test
+# Default target
+all: $(TARGET)
 
-# Build and run tests
+# Link test executable
+$(TARGET): $(SRC) $(TEST)
+	mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) $(SRC) $(TEST) -o $(TARGET) $(LDLIBS)
+
+# Run tests
 test: $(TARGET)
-	@echo "Running tests..."
 	./$(TARGET)
 
-# Build test binary
-$(TARGET): $(SRC) $(TEST)
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(SRC) $(TEST) -o $(TARGET) $(LDFLAGS)
-
-# Clean build files
+# Clean build
 clean:
-	rm -rf $(BUILD_DIR)
-
-.PHONY: all test clean
+	rm -rf $(BIN_DIR)
