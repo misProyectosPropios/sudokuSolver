@@ -14,7 +14,9 @@ void sudokuResuelto(struct sudoku* sudokuResuelto, struct sudoku* sudokuPorResol
     }
 
     for(int i = 1; i <= sudoku_size; i++) {
-        backtrackingSudoku(sudokuPorResolver, 1, 1);
+        if(backtrackingSudoku(sudokuPorResolver, 1, 1)) {
+            return;
+        }
     }
 }
 
