@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <sudoku.h>
+#include "./sudoku.h"
 
-#define sudoku_size 9
-#define sudoku_square_size 3
-#define sudoku_empty_cell -1
+
 
 void sudokuResuelto(struct sudoku* sudokuResuelto, struct sudoku* sudokuPorResolver) {
     
@@ -30,6 +28,20 @@ bool seRepitenNumerosEnFilas(struct sudoku* sudokuResolviendo) {
 }
 
 bool hayNumerosRepetidosEnFilaN(struct sudoku* sudokuResolviendo, int fila) {
+    bool apareceValorAntes[] = {false, false, false, false, false, 
+                                false, false, false, false, false};
+    
+    for(int i = 0; i < sudoku_size; i++) {
+        int valorCelda = sudokuResolviendo->matriz[fila][i] - 1;
+        if (valorCelda == sudoku_empty_cell - 1) {
+            continue;
+        }
+        else if(apareceValorAntes[valorCelda]) {
+            return true;
+        } else {
+            apareceValorAntes[valorCelda] = true;
+        }
+    }       
     return false;
 }
 
@@ -43,6 +55,20 @@ bool seRepitenNumerosEnColumnas(struct sudoku* sudokuResolviendo) {
 }
 
 bool hayNumerosRepetidosEnColumnaN(struct sudoku* sudokuResolviendo, int columna) {
+    bool apareceValorAntes[] = {false, false, false, false, false, 
+                                false, false, false, false, false};
+    
+    for(int i = 0; i < sudoku_size; i++) {
+        int valorCelda = sudokuResolviendo->matriz[i][columna] - 1;
+        if (valorCelda == sudoku_empty_cell - 1) {
+            continue;
+        }
+        else if(apareceValorAntes[valorCelda]) {
+            return true;
+        } else {
+            apareceValorAntes[valorCelda] = true;
+        }
+    }       
     return false;
 }
 
