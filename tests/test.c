@@ -3,17 +3,6 @@
 #include <stdbool.h>
 #include "../src/sudoku.h"
 
-
-int maxi(int i1, int i2)
-{
-    return (i1 > i2) ? i1 : i2;
-}
-
-void test_maxi(void)
-{
-    CU_ASSERT(maxi(0,2) == 2);
-}
-
 void test_seRepitenNumerosEnFilas_matrizVacia(void) {
   struct sudoku vacio;    
       
